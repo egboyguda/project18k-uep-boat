@@ -1,0 +1,102 @@
+<% layout('layouts/boilerplate') %>
+<div class="row mt-5">
+    <p></p>
+    <h1 class="text-center">PASSENGER DETAILS</h1>
+    <div class="col-6 offset-3">
+      <form action="/admin/establishment/add" method="post" novalidate class="validated-form mt-3">
+        <div class="form-inline">
+            <div class="mb-3">
+                <label class='form-label' for="name">Name</label>
+                <input class='form-control' type="text" name="name" id="name" required>
+                <div class="valid-feedback">Looks Good</div>
+            </div>
+            <div class="mb-3">
+              <label class='form-label' for="contactNum">Contact Number:</label>
+              <input class='form-control' type="text" contactNum="contactNum" id="contactNum" name="contactNum" required>
+              <div class="valid-feedback">Looks Good</div>
+          </div>
+        </div> 
+        
+        <div id="loading" class="loading">
+          Loading&#8230;     
+        </div>
+
+          <div class="mb-3">
+              <label class='form-label' for="address">Address</label>
+              <input class='form-control' type="text" name="address" id="address" required>
+              <div class="valid-feedback">Looks Good</div>
+          </div>
+          <div class="mb-3">
+              <input class="btn btn-primary" id='guda' type="button" onClick="sendData();" value="SUBMIT">
+
+
+          </div>
+          </form>
+
+    </div>
+
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">SUCCESSFULLY ADDED</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modal-body">
+     
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+var loadingDiv = document.getElementById('loading');
+ var myModal = new bootstrap.Modal(document.getElementById('exampleModal'))
+
+
+function showSpinner() {
+  loadingDiv.style.visibility = 'visible';
+}
+
+function hideSpinner() {
+  loadingDiv.style.visibility = 'hidden';
+}
+
+
+function sendData(){
+  var name =document.getElementById('name').value;
+var contactNum = document.getElementById('contactNum').value;
+var address = document.getElementById('address').value
+var modelBody =document.getElementById('modal-body')
+      showSpinner()
+    
+    axios.post('/add',{
+        name:name,
+        contactNum: contactNum,
+        address:address,
+    }).then((res)=>{
+      console.log(res.data)
+      hideSpinner()
+      modelBody.innerHTML = `<div class=\"text-center\">
+  <img src=\"${res.data}\" class=\"rounded mx-auto d-block\"> 
+  <p>
+  
+  </p>
+      <div class=\"text-center\">
+          <a href=\"${res.data}\" download class=\"btn btn-success\">Download</a>
+      </div>
+  
+</div>
+`
+      myModal.show()
+       
+    })
+}
+</script>
