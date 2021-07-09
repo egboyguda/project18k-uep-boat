@@ -1,0 +1,33 @@
+<% layout('layouts/boilerplate') %>
+<link rel="stylesheet" href="/css/qr.css">
+<div class="space"></div>
+<div class="row centered justify-content-md-center mt-5  col-6 offset-3">
+    
+ 
+    <p class="text-center" id="p"></p>
+    <div  id="reader">
+    </div>
+</div>
+
+<script src="/js/html5-qrcode.min.js"></script>
+
+<script>
+    async function onScanSuccess(qrCodeMessage) {
+  // handle on success condition with the decoded message
+  //onScanSuccess = await noop;
+  html5QrcodeScanner.clear();
+  axios.post(`/qrcode/scan/${qrCodeMessage}/out`).then(function (res) {
+    //p.innerHTML = res.data;
+    alert(`successfuly scan ${res.data}`);
+    window.location = '/qrcode/out';
+  });
+}
+
+var html5QrcodeScanner = new Html5QrcodeScanner('reader', {
+  fps: 10,
+  qrbox: 250,
+});
+
+html5QrcodeScanner.render(onScanSuccess);
+
+</script>

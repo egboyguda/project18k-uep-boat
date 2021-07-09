@@ -1,0 +1,73 @@
+<% layout('layouts/boilerplate') %>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+<div class="row mt-5">
+    
+    <h1 class="text-center mt-5">Scan QRcode</h1>
+    <div class="col-6 offset-3">
+    
+            <div class="mb-3">
+                <label for="regions" class="form-label">Select Boat</label>
+                <select name="destination" id="regions" class="form-select">
+                    <option selected>Open this select menu</option>
+                    <option value="boat1">BOAT1</option>
+                    <option value="boat2">BOAT2</option>
+                    <option value="boat3">BOAT3</option>
+                    <option value="boat4">BOAT4</option>
+                </select>
+            </div>
+           
+            
+            <input type="button" value="submit" onClick='getScan();' class="btn btn-primary" >  
+            <h1 class="text-center mt-5">Generate Report</h1>
+<div class="mb-3 ">
+    <label for="date" class="form-label">Select Date</label>
+    <input type="date" name=birthday" id="date" class="form-control">
+    
+</div>  
+<button class="btn btn-primary">Generate</button>
+</div>
+
+</div>
+
+<table id="example" class="display" style="width:100%">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Contact Number</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        
+    </tbody>
+
+</table>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+<script>
+    $(document).ready(function() {
+    $('#example').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'pdfHtml5',
+                orientation: 'landscape',
+                pageSize: 'LEGAL'
+            }
+        ]
+        
+    });
+} );
+</script>
+
+<script>
+    function getScan(){
+        var boat = document.getElementById('regions').value;
+        window.location=`/${boat}/scan`
+    }
+</script>

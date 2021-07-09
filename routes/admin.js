@@ -22,4 +22,14 @@ router.post('/add', async (req, res) => {
   });
 });
 
+//
+router.get('/dash', (req, res) => {
+  res.render('admin/dash');
+});
+
+//scan boat
+router.get('/:boat/scan', (req, res) => {
+  res.render('admin/scan');
+});
+
 module.exports = router;
