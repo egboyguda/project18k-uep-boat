@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router({ mergeParams: true });
 const Passenger = require('../models/passenger.model');
 const qr = require('qrcode');
+const Trip = require('../models/trip.model');
 router.get('/', (req, res) => {
   res.render('admin/dashboard');
 });
@@ -28,8 +29,11 @@ router.get('/dash', (req, res) => {
 });
 
 //scan boat
-router.get('/:boat/scan', (req, res) => {
-  res.render('admin/scan');
+router.get('/:boat', async (req, res) => {
+  const { boat } = req.params;
+  const trip = await new Trip({ boat: boat });
+
+  res.redirect(`/${trip.id}/scan`);
 });
 
 module.exports = router;
