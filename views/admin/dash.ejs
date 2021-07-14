@@ -24,7 +24,7 @@
     <input type="date" name=birthday" id="date" class="form-control">
     
 </div>  
-<button class="btn btn-primary">Generate</button>
+<button class="btn btn-primary" onClick='sendDate();'>Generate</button>
 </div>
 
 </div>
@@ -36,6 +36,7 @@
             <th>Address</th>
             <th>Contact Number</th>
             <th>Date</th>
+            <th>Boat</th>
         </tr>
     </thead>
     <tbody>
@@ -49,25 +50,78 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-    $(document).ready(function() {
-    $('#example').DataTable({
-        dom: 'Bfrtip',
-        buttons: [
-            {
-                extend: 'pdfHtml5',
-                orientation: 'landscape',
-                pageSize: 'LEGAL'
-            }
-        ]
-        
-    });
-} );
+    
 </script>
 
 <script>
     function getScan(){
         var boat = document.getElementById('regions').value;
-        window.location=`/${boat}`
+        window.location=`/dash/${boat}`
+    }
+    
+    function sendDate(){
+        $('#example').DataTable().clear().destroy();
+        var date = document.getElementById('date').value
+        axios.post('/data',{
+            date:date
+        }).then((res)=>{
+            
+            var passenger =[]
+            //console.log(res.data);
+            console.log(passenger)
+            console.log(res.data)
+            for(data of res.data){
+                data.passenger.map(item =>{
+                    passenger.push({...item,boat:data.boat}) //destructure passenger
+                })
+            }
+            console.log(passenger)
+            const date =convertDate(data.date)
+            $('#example').DataTable({
+            data:passenger,
+            dom: 'Bfrtip',
+            "columns":[
+                {'data':'name'},
+                {'data':'address'},
+                {'data':'contactNum'},
+                {'data':null,
+                 'mRender':function(o){return `${date}`}
+
+            },
+                {'data':'boat',}    
+            
+
+            ],
+            buttons: [
+            {
+                extend: 'pdfHtml5',
+                //orientation: 'landscape',
+                pageSize: 'LEGAL',
+                download:'open'
+            }
+        ]
+        
+    });
+           
+        }).then((res)=>{
+        
+        })
+    }
+
+    function convertDate(date){
+        date = new Date(date)
+        year = date.getFullYear();
+        month = date.getMonth()+1;
+        dt = date.getDate();
+
+        if (dt < 10) {
+             dt = '0' + dt;
+            }
+        if (month < 10) {
+            month = '0' + month;
+            }
+        return year+'-' + month + '-'+dt
     }
 </script>

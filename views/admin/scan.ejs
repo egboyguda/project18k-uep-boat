@@ -10,16 +10,22 @@
 </div>
 
 <script src="/js/html5-qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 
 <script>
     async function onScanSuccess(qrCodeMessage) {
   // handle on success condition with the decoded message
   //onScanSuccess = await noop;
   html5QrcodeScanner.clear();
-  axios.post(`/qrcode/scan/${qrCodeMessage}/out`).then(function (res) {
+  axios.post('/dash/<%= trip%>/scan',{
+    person:qrCodeMessage
+  })
+  .then(function (res) {
     //p.innerHTML = res.data;
     alert(`successfuly scan ${res.data}`);
-    window.location = '/qrcode/out';
+    window.location('/dash/<%=trip%>/scan')
+    
   });
 }
 
