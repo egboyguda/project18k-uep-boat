@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
 <div class="row mt-5">
     
-    <h1 class="text-center mt-5">Scan QRcode</h1>
+    <h1 class="text-center mt-5">Contact Tracing</h1>
     <div class="col-6 offset-3">
     
             <div class="mb-3">
@@ -16,15 +16,13 @@
                 </select>
             </div>
            
-            
-            <input type="button" value="submit" onClick='getScan();' class="btn btn-primary" >  
-            <h1 class="text-center mt-5">Generate Report</h1>
+
 <div class="mb-3 ">
     <label for="date" class="form-label">Select Date</label>
     <input type="date" name=birthday" id="date" class="form-control">
     
 </div>  
-<button class="btn btn-primary" onClick='sendDate();'>Generate</button>
+<button class="btn btn-primary" onClick='sendData();'>Submit</button>
 </div>
 
 </div>
@@ -51,33 +49,26 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script>
-    
-</script>
 
 <script>
-    function getScan(){
-        var boat = document.getElementById('regions').value;
-        window.location=`/dash/${boat}`
-    }
-    
-    function sendDate(){
+    function sendData(){
         $('#example').DataTable().clear().destroy();
+        var boat = document.getElementById('regions').value;
         var date = document.getElementById('date').value
-        axios.post('/data',{
+        axios.post('/contact',{
+            boat:boat,
             date:date
         }).then((res)=>{
-            
-            var passenger =[]
-            //console.log(res.data);
-            console.log(passenger)
             console.log(res.data)
+            var passenger =[]
             for(data of res.data){
                 data.passenger.map(item =>{
                     passenger.push({...item,boat:data.boat}) //destructure passenger
                 })
             }
-           
+
+            console.log(passenger)
+
             const date =convertDate(data.date)
             $('#example').DataTable({
             data:passenger,
@@ -104,12 +95,8 @@
         ]
         
     });
-           
-        }).then((res)=>{
-        
         })
     }
-
     function convertDate(date){
         date = new Date(date)
         year = date.getFullYear();

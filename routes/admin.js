@@ -74,4 +74,29 @@ router.post('/data', async (req, res) => {
   res.send(trip);
 });
 
+router.get('/contact', (req, res) => {
+  res.render('admin/tracing');
+});
+router.post('/contact', async (req, res) => {
+  console.log(req.body);
+  let { boat, date } = req.body;
+  date = new Date(date);
+  let date1 = date.toISOString();
+  date1 = new Date(date1);
+  date.setDate(date.getUTCDate()); // Setting utc date, Only useful if you're region is behind UTC
+  date = new Date(date.setHours(23, 59, 59, 999));
+  console.log(typeof date);
+  console.log(typeof date1);
+  const trip = await Trip.find({
+    boat: boat,
+    date: {
+      $gte: date1,
+      $lte: date,
+    },
+  }).populate({
+    path: 'passenger',
+    populate: { path: 'establishment' },
+  });
+  res.send(trip);
+});
 module.exports = router;
