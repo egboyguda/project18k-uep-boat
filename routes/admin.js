@@ -3,12 +3,28 @@ const router = express.Router({ mergeParams: true });
 const Passenger = require('../models/passenger.model');
 const qr = require('qrcode');
 const Trip = require('../models/trip.model');
+const passport = require('passport');
+const User = require('../models/user.model');
+
+//genarate fake account
+router.get('/fake', async (req, res) => {
+  const user = new User({ username: 'admin', isAdmin: true });
+  await User.register(user, 'admin');
+  res.redirect('/add');
+});
+router.get('/login', (req, res) => {
+  res.render('admin/login');
+});
 router.get('/', (req, res) => {
   res.render('admin/dashboard');
 });
 
 router.get('/add', (req, res) => {
-  res.send('ok');
+  res.render('admin/addboat');
+});
+router.post('/boat', (req, res) => {
+  console.log(req.body);
+  res.redirect('/add');
 });
 
 router.post('/add', async (req, res) => {
@@ -99,4 +115,8 @@ router.post('/contact', async (req, res) => {
   });
   res.send(trip);
 });
+router.get('/user', (req, res) => {
+  res.render('admin/user');
+});
+
 module.exports = router;

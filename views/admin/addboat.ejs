@@ -1,0 +1,30 @@
+<% layout('layouts/boilerplate') %>
+<div class="row mt-5">
+    <p></p>
+    <h1 class="text-center">Boat Details</h1>
+    <div class="col-6 offset-3">
+      <form action="/boat" method="post" novalidate class="validated-form mt-3">
+        <div class="form-inline">
+            <div class="mb-3">
+                <label class='form-label' for="name">Boat Name</label>
+                <input class='form-control' type="text" name="name" id="name" required>
+                <div class="valid-feedback">Looks Good</div>
+            </div>
+            <div class="mb-3">
+                <label class='form-label' for="name">Capitan</label>
+                <input class='form-control' type="text" name="name" id="name" required>
+                <div class="valid-feedback">Looks Good</div>
+            </div>
+            <div class="mb-3">
+              <label class='form-label' for="contactNum">Contact Number:</label>
+              <input class='form-control' type="text" contactNum="contactNum" id="contactNum" name="contactNum" required>
+              <div class="valid-feedback">Looks Good</div>
+          </div>
+        </div> 
+              <input class="btn btn-primary" id='guda' type="submit" value="SUBMIT">
+
+
+          </div>
+          </form>
+
+    </div>
