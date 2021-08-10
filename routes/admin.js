@@ -5,6 +5,7 @@ const qr = require('qrcode');
 const Trip = require('../models/trip.model');
 const passport = require('passport');
 const User = require('../models/user.model');
+const { isLoggedIn } = require('../middleware');
 
 //genarate fake account
 router.get('/fake', async (req, res) => {
@@ -15,14 +16,25 @@ router.get('/fake', async (req, res) => {
 router.get('/login', (req, res) => {
   res.render('admin/login');
 });
+router.post(
+  '/login',
+  passport.authenticate('local', {
+    //failureFlash: true,
+    failureRedirect: '/login',
+  }),
+  async (req, res) => {
+    res.redirect('/dash');
+    //res.redirect(redirectUrl);
+  }
+);
 router.get('/', (req, res) => {
   res.render('admin/dashboard');
 });
 
-router.get('/add', (req, res) => {
+router.get('/add', isLoggedIn, (req, res) => {
   res.render('admin/addboat');
 });
-router.post('/boat', (req, res) => {
+router.post('/boat', isLoggedIn, (req, res) => {
   console.log(req.body);
   res.redirect('/add');
 });
@@ -42,21 +54,21 @@ router.post('/pass', async (req, res) => {
 //scan boat
 
 //
-router.get('/dash', (req, res) => {
+router.get('/dash', isLoggedIn, (req, res) => {
   res.render('admin/dash');
 });
-router.get('/dash/:boat', async (req, res) => {
+router.get('/dash/:boat', isLoggedIn, async (req, res) => {
   const { boat } = req.params;
   const trip = await new Trip({ boat: boat, date: Date.now() });
   await trip.save();
   console.log(trip.id);
   res.redirect(`/dash/${trip.id}/scan`);
 });
-router.get('/dash/:trip/scan', async (req, res) => {
+router.get('/dash/:trip/scan', isLoggedIn, async (req, res) => {
   const { trip } = req.params;
   res.render('admin/scan', { trip });
 });
-router.post('/dash/:id/scan', async (req, res) => {
+router.post('/dash/:id/scan', isLoggedIn, async (req, res) => {
   const { id } = req.params;
   const { person } = req.body;
   const trip = await Trip.findById(id);
@@ -65,7 +77,7 @@ router.post('/dash/:id/scan', async (req, res) => {
   res.send('successfully scan');
 });
 
-router.post('/data', async (req, res) => {
+router.post('/data', isLoggedIn, async (req, res) => {
   let { date } = req.body;
 
   date = new Date(date);
@@ -90,10 +102,10 @@ router.post('/data', async (req, res) => {
   res.send(trip);
 });
 
-router.get('/contact', (req, res) => {
+router.get('/contact', isLoggedIn, (req, res) => {
   res.render('admin/tracing');
 });
-router.post('/contact', async (req, res) => {
+router.post('/contact', isLoggedIn, async (req, res) => {
   console.log(req.body);
   let { boat, date } = req.body;
   date = new Date(date);
