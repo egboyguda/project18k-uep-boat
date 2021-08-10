@@ -27,7 +27,7 @@ router.post('/boat', (req, res) => {
   res.redirect('/add');
 });
 
-router.post('/add', async (req, res) => {
+router.post('/pass', async (req, res) => {
   console.log(req.body);
   //di struc to body sa req+
   const { name, address, contactNum } = req.body;
