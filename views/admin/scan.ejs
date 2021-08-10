@@ -24,7 +24,8 @@
   .then(function (res) {
     //p.innerHTML = res.data;
     alert(`successfuly scan ${res.data}`);
-    window.location('/dash/<%=trip%>/scan')
+    window.location.replace("https://passenger-record-system.herokuapp.com/dash/<%=trip%>/scan");
+    
     
   });
 }
