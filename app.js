@@ -14,7 +14,7 @@ require('dotenv').config();
 const User = require('./models/user.model');
 //mongodb
 mongoose.connect(
-  process.env.DB_URL || 'mongodb://localhost/passenger-qrcode', //process.env.DB_URL,
+  process.env.DB_URL, //process.env.DB_URL,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
