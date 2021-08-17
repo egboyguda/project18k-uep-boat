@@ -5,13 +5,25 @@ const qr = require('qrcode');
 const Trip = require('../models/trip.model');
 const passport = require('passport');
 const User = require('../models/user.model');
-const { isLoggedIn } = require('../middleware');
+const { isLoggedIn, isAdminL } = require('../middleware');
+const Boat = require('../models/boat.model');
 
 //genarate fake account
 router.get('/fake', async (req, res) => {
-  const user = new User({ username: 'admin', isAdmin: true });
+  const user = await new User({ username: 'admin', isAdmin: true });
   await User.register(user, 'admin');
   res.redirect('/add');
+});
+router.get('/staff', async (req, res) => {
+  const { username, password, role } = req.body;
+  if (req.body.role === 'staff') {
+    const user = await new User({ username: username, role: role });
+    await User.register(user, password);
+    res.redirect('/dash');
+  } else {
+    const user = await new User({ username: username, role: role });
+    await user.regiter();
+  }
 });
 router.get('/login', (req, res) => {
   res.render('admin/login');
@@ -31,11 +43,13 @@ router.get('/', (req, res) => {
   res.render('admin/dashboard');
 });
 
-router.get('/add', isLoggedIn, (req, res) => {
+router.get('/add', isLoggedIn, isAdminL, (req, res) => {
   res.render('admin/addboat');
 });
-router.post('/boat', isLoggedIn, (req, res) => {
-  console.log(req.body);
+router.post('/boat', isLoggedIn, isAdminL, async (req, res) => {
+  const { name, capitan, contactNum } = req.body;
+  const boat = await new Boat({ name, capitan, contactNum });
+  await boat.save();
   res.redirect('/add');
 });
 
@@ -54,8 +68,9 @@ router.post('/pass', async (req, res) => {
 //scan boat
 
 //
-router.get('/dash', isLoggedIn, (req, res) => {
-  res.render('admin/dash');
+router.get('/dash', isLoggedIn, async (req, res) => {
+  const boat = await Boat.find({});
+  res.render('admin/dash', { boat });
 });
 router.get('/dash/:boat', isLoggedIn, async (req, res) => {
   const { boat } = req.params;
@@ -102,8 +117,9 @@ router.post('/data', isLoggedIn, async (req, res) => {
   res.send(trip);
 });
 
-router.get('/contact', isLoggedIn, (req, res) => {
-  res.render('admin/tracing');
+router.get('/contact', isLoggedIn, async (req, res) => {
+  const boat = await Boat.find({});
+  res.render('admin/tracing', { boat });
 });
 router.post('/contact', isLoggedIn, async (req, res) => {
   console.log(req.body);
@@ -116,7 +132,7 @@ router.post('/contact', isLoggedIn, async (req, res) => {
   console.log(typeof date);
   console.log(typeof date1);
   const trip = await Trip.find({
-    boat: boat,
+    boat: boat.trim(),
     date: {
       $gte: date1,
       $lte: date,
@@ -125,10 +141,31 @@ router.post('/contact', isLoggedIn, async (req, res) => {
     path: 'passenger',
     populate: { path: 'establishment' },
   });
+  console.log(trip);
   res.send(trip);
 });
 router.get('/user', (req, res) => {
   res.render('admin/user');
 });
 
+router.get('/account', isLoggedIn, isAdminL, (req, res) => {
+  res.render('admin/account');
+});
+router.post('/account', isLoggedIn, isAdminL, async (req, res) => {
+  console.log(req.body);
+  const { username, role, up } = req.body;
+  if (role == 'staff' || role == 'Staff') {
+    const user = await new User({ username: username, isStaff: true });
+    await User.register(user, up);
+  } else {
+    const user = await new User({ username: username, isAdmin: true });
+    await User.register(user, up);
+  }
+  res.redirect('/account');
+});
+router.get('/logout', (req, res) => {
+  req.logOut();
+
+  res.redirect('/login');
+});
 module.exports = router;

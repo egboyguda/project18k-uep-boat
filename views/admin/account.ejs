@@ -1,0 +1,43 @@
+<% layout('layouts/boilerplate-2') %>
+
+<div class="row mt-5">
+    <p class="mt-5"></p>
+    <h1 class="text-center">Add Account</h1>
+    <div class="col-6 offset-3">
+
+
+
+        <form action="/account" method='POST'
+        oninput='up2.setCustomValidity(up2.value != up.value ? "Passwords do not match." : "")'>
+        
+        <div class ="mb-3">
+          <label for="username" class="form-label">Username</label>
+          <input type="text" name='username' id="username" class="form-control">
+      </div>
+      <div class ="mb-3">
+          <label for="password1" class="form-label">Password:</label>
+          <input type="password" required name='up' id="password1" class="form-control">
+      </div>
+      <div class ="mb-3">
+          <label for="password2" class="form-label">Confirm Password</label>
+          <input type="password" name='up2' id="password2" class="form-control">
+      </div>
+   
+       <div class="mb-3">
+                  <label for="civilStatus" class="form-label">Account Type</label>
+                  <select name="role" id="civilStatus" class="form-select">
+                      <option selected>Open this select menu</option>
+                          <option value="admin">Admin</option>
+                          <option name="staff">Staff</option>
+                         
+                          
+                  </select>
+              </div>
+              <input type="submit" value="Submit" class="btn btn-success">
+  </form>
+    </div>
+   
+   
+    
+   
+</div>

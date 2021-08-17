@@ -51,16 +51,32 @@
                         <span>Contact Tracing</span>
                     </a>
                 </li>
+                <% if(currentUser.isAdmin){%> 
                 <li>
                     <a href="/add" class="nav-link px-3">
                         <span class="me-2"><i class="bi bi-book-fill"></i></span>
                         <span>Add Boat</span>
                     </a>
                 </li>
+                <% } %> 
+                <% if(currentUser.isAdmin){%> 
+                <li>
+                    <a href="/account" class="nav-link px-3">
+                        <span class="me-2"><i class="bi bi-book-fill"></i></span>
+                        <span>Add Account</span>
+                    </a>
+                </li>
+                <% } %> 
                 <li class="my-4">
                     <hr class="dropdown-divider bg-light" />
                 </li>
                
+            </ul>
+            <ul class="navbar-nav">
+                <li>
+                    <a href="/logout" class="nav-link px-3 text-danger">
+                    <span>Logout</span></a>
+                </li>
             </ul>
         </nav>
     </div>

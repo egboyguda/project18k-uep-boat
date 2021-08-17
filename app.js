@@ -13,15 +13,12 @@ const localStrategy = require('passport-local');
 require('dotenv').config();
 const User = require('./models/user.model');
 //mongodb
-mongoose.connect(
-  process.env.DB_URL, //process.env.DB_URL,
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-  }
-);
+mongoose.connect(process.env.DB_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+  useFindAndModify: false,
+});
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));

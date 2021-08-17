@@ -7,3 +7,10 @@ module.exports.isLoggedIn = (req, res, next) => {
 
   next();
 };
+module.exports.isAdminL = async (req, res, next) => {
+  if (!req.user.isAdmin) {
+    await res.send('your not authorize to enter');
+    //res.redirect('/login');
+  }
+  next();
+};

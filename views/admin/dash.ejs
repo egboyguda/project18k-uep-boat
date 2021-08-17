@@ -9,10 +9,10 @@
                 <label for="regions" class="form-label">Select Boat</label>
                 <select name="destination" id="regions" class="form-select">
                     <option selected>Open this select menu</option>
-                    <option value="boat1">BOAT1</option>
-                    <option value="boat2">BOAT2</option>
-                    <option value="boat3">BOAT3</option>
-                    <option value="boat4">BOAT4</option>
+                    <% for(data of boat){ %> 
+                    <option value='<%=data.name  %> '><%= data.name  %> </option>
+                    <% } %> 
+                
                 </select>
             </div>
            

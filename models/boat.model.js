@@ -6,7 +6,7 @@ const boatSchema = new Schema({
   capitan: {
     type: String,
   },
-  boatName: {
+  name: {
     type: String,
   },
   contactNumber: {
