@@ -36,6 +36,7 @@
             <th>Address</th>
             <th>Contact Number</th>
             <th>Time In</th>
+    
             <th>Boat</th>
         </tr>
     </thead>
@@ -78,7 +79,7 @@
                 })
             }
            
-            //const date =convertDate(data.date)
+            const date =convertDate(data.date)
             $('#example').DataTable({
             data:passenger,
             dom: 'Bfrtip',
@@ -87,7 +88,7 @@
                 {'data':'address'},
                 {'data':'contactNum'},
                 {'data':null,
-                 
+                 'mRender':function(o){return `${convertDate(date)}`}
 
             },
                 {'data':'boat',}    
