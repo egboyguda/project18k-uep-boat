@@ -36,7 +36,7 @@
             <th>Address</th>
             <th>Contact Number</th>
             <th>Time In</th>
-    
+    <th>Time Out</th>
             <th>Boat</th>
         </tr>
     </thead>
@@ -57,63 +57,8 @@
 </script>
 
 <script>
-    function getScan(){
-        var boat = document.getElementById('regions').value;
-        window.location=`/dash/${boat}`
-    }
-    
-    function sendDate(){
-        $('#example').DataTable().clear().destroy();
-        var date = document.getElementById('date').value
-        axios.post('/data',{
-            date:date
-        }).then((res)=>{
-            
-            var passenger =[]
-            //console.log(res.data);
-            console.log(passenger)
-            console.log(res.data)
-            for(data of res.data){
-                data.passenger.map(item =>{
-                    passenger.push({...item,boat:data.boat}) //destructure passenger
-                })
-            }
-            //console.log("passenger ini " +passenger)
-            const date =convertDate(data.date)
-            $('#example').DataTable({
-            data:passenger,
-            dom: 'Bfrtip',
-            "columns":[
-                {'data':'name'},
-                {'data':'address'},
-                {'data':'contactNum'},
-                {'data':null,
-                 'mRender':function(o){return `${convertDate(date)}`}
-            },
-            {'data':null,
-                 'mRender':function(o){return `${convertDate(dateOut)}`}
-            },
-                {'data':'boat',}    
-            
 
-            ],
-            buttons: [
-            {
-                extend: 'pdfHtml5',
-                //orientation: 'landscape',
-                pageSize: 'LEGAL',
-                download:'open'
-            }
-        ]
-        
-    });
-           
-        }).then((res)=>{
-        
-        })
-    }
-
-    function convertDate(date){
+function convertDate(date){
         date = new Date(date)
         year = date.getFullYear();
         month = date.getMonth()+1;
@@ -136,4 +81,62 @@ var sec = (seconds < 10) ? '0' + seconds : seconds;
        var newTimeString = hr + ':' + min + ':' + sec+':'+dayMode;
             return newDateString + ' '+newTimeString;
     }
+    function getScan(){
+        var boat = document.getElementById('regions').value;
+        window.location=`/dash/${boat}`
+    }
+    
+    function sendDate(){
+        $('#example').DataTable().clear().destroy();
+        var date = document.getElementById('date').value
+        axios.post('/data',{
+            date:date
+        }).then((res)=>{
+            
+            var passenger =[]
+            //console.log(res.data);
+            console.log(passenger)
+            console.log(res.data)
+            for(data of res.data){
+                data.passenger.map(item =>{
+                    passenger.push({...item,boat:data.boat,date:data.date,dateOut:data.dateOut}) //destructure passenger
+                })
+            }
+            console.log(...passenger )
+            //const date =convertDate(data.date)
+            $('#example').DataTable({
+            data:passenger,
+            dom: 'Bfrtip',
+            "columns":[
+                {'data':'name'},
+                {'data':'address'},
+                {'data':'contactNum'},
+                {'data':null,
+                 'mRender':function(o){return `${convertDate(o.date)}`}
+            }, {'data':null,
+            'mRender':function(o){return `${convertDate(o.dateOut)}`}
+            
+            },
+          
+          
+                {'data':'boat',}    
+            
+
+            ],
+            buttons: [
+            {
+                extend: 'pdfHtml5',
+                //orientation: 'landscape',
+                pageSize: 'LEGAL',
+                download:'open'
+            }
+        ]
+        
+    });
+           
+        }).then((res)=>{
+        
+        })
+    }
+
 </script>

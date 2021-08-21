@@ -119,7 +119,7 @@ router.post('/data', isLoggedIn, async (req, res) => {
     },
   }).populate({
     path: 'passenger',
-    populate: { path: 'passenger' },
+    populate: { path: 'Passenger' },
   });
   //populate
   console.log(trip);
