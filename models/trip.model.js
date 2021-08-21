@@ -14,6 +14,9 @@ const tripSchema = new Schema({
   date: {
     type: Date,
   },
+  dateOut: {
+    type: Date,
+  },
 });
 
 const Trip = mongoose.model('Trip', tripSchema);

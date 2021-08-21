@@ -8,7 +8,7 @@
             <div class="mb-3">
                 <label for="regions" class="form-label">Select Boat</label>
                 <select name="destination" id="regions" class="form-select">
-                    <option selected>Open this select menu</option>
+                    
                     <% for(data of boat){ %> 
                     <option value='<%=data.name  %> '><%= data.name  %> </option>
                     <% } %> 
@@ -35,7 +35,8 @@
             <th>Name</th>
             <th>Address</th>
             <th>Contact Number</th>
-            <th>Date</th>
+            <th>Time In</th>
+            <th>Time Out</th>
             <th>Boat</th>
         </tr>
     </thead>
@@ -87,7 +88,10 @@
                 {'data':'address'},
                 {'data':'contactNum'},
                 {'data':null,
-                 'mRender':function(o){return `${date}`}
+                 'mRender':function(o){return `${convertDate(date)}`}
+
+            },{'data':null,
+                 'mRender':function(o){return `${convertDate(dateOut)}`}
 
             },
                 {'data':'boat',}    
@@ -115,6 +119,13 @@
         year = date.getFullYear();
         month = date.getMonth()+1;
         dt = date.getDate();
+        var hours = date.getHours();
+        var dayMode = hours < 12 ? "am" : "pm";
+        var hr= hours <= 12 ? (hours == 0 ? 12 : hours) : hours- 12;
+var minutes = date.getMinutes();
+var min = (minutes < 10) ? '0' + minutes : minutes;
+var seconds = date.getSeconds();
+var sec = (seconds < 10) ? '0' + seconds : seconds;
 
         if (dt < 10) {
              dt = '0' + dt;
@@ -122,6 +133,8 @@
         if (month < 10) {
             month = '0' + month;
             }
-        return year+'-' + month + '-'+dt
+            var newDateString =year+'-' + month + '-'+dt;
+       var newTimeString = hr + ':' + min + ':' + sec+':'+dayMode;
+            return newDateString + ' '+newTimeString;
     }
 </script>

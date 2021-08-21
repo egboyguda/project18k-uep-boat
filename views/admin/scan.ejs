@@ -1,7 +1,7 @@
 <% layout('layouts/boilerplate') %>
 <link rel="stylesheet" href="/css/qr.css">
 <div class="space"></div>
-<div class="row centered justify-content-md-center mt-5  col-6 offset-3">
+<div class="row centered justify-content-md-center col-6 offset-3">
     
  
     <p class="text-center" id="p"></p>
@@ -9,6 +9,9 @@
     </div>
 </div>
 
+<div class="text-center">
+  <button class="btn btn-success mt-5" onclick="doneScan()">Done</button>
+</div>
 <script src="/js/html5-qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
@@ -37,4 +40,13 @@ var html5QrcodeScanner = new Html5QrcodeScanner('reader', {
 
 html5QrcodeScanner.render(onScanSuccess);
 
+
+function doneScan(){
+  axios.post('/<%=trip%>/done',{
+
+  }).then(()=>{
+    window.location.replace('https://passenger-record-system.herokuapp.com/dash')
+  })
+
+}
 </script>

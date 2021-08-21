@@ -91,7 +91,16 @@ router.post('/dash/:id/scan', isLoggedIn, async (req, res) => {
   await trip.save();
   res.send('successfully scan');
 });
-
+router.post('/:trip/done', isLoggedIn, async (req, res) => {
+  console.log('called');
+  const { trip } = req.params;
+  const trip1 = await Trip.findById(trip);
+  console.log(trip1);
+  trip1.dateOut = await Date.now();
+  await trip1.save();
+  console.log(trip1);
+  res.send('ok');
+});
 router.post('/data', isLoggedIn, async (req, res) => {
   let { date } = req.body;
 
@@ -113,7 +122,7 @@ router.post('/data', isLoggedIn, async (req, res) => {
     populate: { path: 'establishment' },
   });
   //populate
-
+  console.log(trip);
   res.send(trip);
 });
 
