@@ -78,7 +78,7 @@
                     passenger.push({...item,boat:data.boat}) //destructure passenger
                 })
             }
-           
+           console.log(passenger)
             const date =convertDate(data.date)
             $('#example').DataTable({
             data:passenger,
@@ -89,7 +89,6 @@
                 {'data':'contactNum'},
                 {'data':null,
                  'mRender':function(o){return `${convertDate(date)}`}
-
             },
                 {'data':'boat',}    
             
